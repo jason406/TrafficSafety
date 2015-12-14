@@ -31,7 +31,7 @@ namespace TrafficSafety.Model
 
         public const double TURNING_RATIO = 0.4;//0.3
         public const double STRAIGHT_RATIO = 1.1; //1.02
-        public const double FLOW_RATIO = 0.7;//当前流量和最大流量的比率
+        public const double FLOW_RATIO = 0.9;//当前流量和最大流量的比率
         public const bool CONSIDER_TUNING = true;
         bool[] isReached; //查询标识，如果某条道路查询过了就为true
         RoadSearch roadSearch;
@@ -165,7 +165,7 @@ namespace TrafficSafety.Model
         }
         public List<RoadInfluence> breadthFirstExecute()
         {
-            if (this.road.RoadID == 77164)
+            if (this.road.RoadID == 9008)
             {
                 int aaa;
             }
@@ -181,6 +181,7 @@ namespace TrafficSafety.Model
 
                     break;
                 case 2:
+                    if (W1b.getW() > W3.getW()) throw new Exception("Wrong");
                     duration = new Duration(road.Length, W1b, W3, T23, t0, spreadCase);
 
                     break;
@@ -351,6 +352,8 @@ namespace TrafficSafety.Model
                 {
                     this.passStraightCount++;
                 }
+                //测试代码
+                //if(this.passTurningCount==0) System.Diagnostics.Debug.WriteLine("Straight" + road.RoadID + ","+road.name+"," + this.passStraightCount);
                 //波速调整
                 if (this.spreadCase == 2)
                 {
@@ -366,7 +369,7 @@ namespace TrafficSafety.Model
                     W2.setW(W2.getW() * Math.Pow(STRAIGHT_RATIO, this.passStraightCount));
                     W1b.setW(W1b.getW() * Math.Pow(STRAIGHT_RATIO, this.passStraightCount));
                 }
-                checkWaveSpeed();
+                
                 road.passTurningCount = this.passTurningCount;
                 road.passStraightCount = this.passStraightCount;
                 //测试代码
@@ -394,7 +397,8 @@ namespace TrafficSafety.Model
             //W2b = new W(q3, this.road.qm_perLane * this.road.numOfLane, k3, 0.5 * k3, this.road);
             //W2b.v2 = road.Vl;
             //System.Diagnostics.Debug.WriteLine("t0="+this.t0+"...W3="+this.W3.getW()+"...W2:"+this.W2.getW()+"...W1="+this.W1.getW()+"...W1b="+this.W1b.getW());
-            if (W1.getW()<=0 || W2.getW()<=0 || W3.getW()<=0 || W1b.getW()<=0 || W2b.getW()<=0 ) throw new Exception("WRONG");
+            checkWaveSpeed();
+            if (W1.getW()<0 || W2.getW()<=0 || W3.getW()<=0 || W1b.getW()<=0 || W2b.getW()<=0 ) throw new Exception("WRONG");
 
             //if (W3.getW() < W1b.getW()) throw new Exception("WRONG");
             //if ( W2.getW() < W1.getW()) throw new Exception("WRONG");
@@ -406,12 +410,21 @@ namespace TrafficSafety.Model
         private void checkWaveSpeed()//让集结波波速小于启动波速
         {
 
-            double val=0.1;
+            double val=0.5;
             double vl = 16 / 3.6; //启动波速
-            
-            if (W1.getW() > vl) W1.setW(vl - val);
-            if (W2.getW() > vl) W2.setW(vl - val);
-            if (W1b.getW() > vl) W1b.setW(vl - val);
+
+            if (Math.Abs(W1.getW() -vl)< val)
+            {
+                W1.setW(vl - val);
+            }
+            if (Math.Abs(W2.getW() - vl) < val)
+            {
+                W2.setW(vl - val);
+            }
+            if (Math.Abs(W1b.getW() - vl) < val)
+            {
+                W1b.setW(vl - val);
+            }
 
             //if (this.spreadCase == 1 && W2.getW() < W1.getW())
             //{

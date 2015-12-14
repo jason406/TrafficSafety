@@ -329,7 +329,7 @@ namespace TrafficSafety.Model
                 System.Diagnostics.Debug.WriteLine("时间:" + lookTime[i]);
                 foreach (RoadSection roadSection in result)
                 {
-                    if (roadSection.name == roadName && roadSection.passTurningCount == 0 && roadSection.speedResultZone.Count>0) //passturningcount=1为曲阳路 =0是四平路
+                    if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=51 && roadSection.speedResultZone.Count>0) //passturningcount=1为曲阳路 =0是四平路
                     {
                         specificResult.Add(roadSection);
                         foreach (Zone resultZones in roadSection.speedResultZone)
@@ -345,7 +345,7 @@ namespace TrafficSafety.Model
                 for (int j = 0; j < specificResult.Count; j++)
                 {
                     RoadSection roadSection = specificResult[j];
-                    if (roadSection.name == roadName && roadSection.passTurningCount == 0)
+                    if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=51)
                     {
                         if (j==specificResult.Count-1)
                         {

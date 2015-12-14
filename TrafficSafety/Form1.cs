@@ -305,7 +305,7 @@ namespace TrafficSafety
             //淮海中路事故
             RoadSection mRoad = new RoadSection(28755, networkDataset);
             ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
-            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 123541, 10, 2, 1, 840, 300, 600, 0); //车道数2 剩余1
+            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 123541, 10, 2, 1, 1080, 300, 600, 0); //车道数2 剩余1
         }
         
 #region Arcgis网络路径搜寻
@@ -532,7 +532,7 @@ throw new System.Exception("Destination unreachable");
         private void infulenceLengthToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RoadResult mResult = new RoadResult(mMainroad);
-            int[] looktime = new int[6] { 150, 300, 450, 600, 750, 900 };
+            int[] looktime = new int[6] { 150, 300, 450, 600, 750, 3000 };
             //mResult.getSpecificRoadResult("四平路", looktime);
             //mResult.getSpecificRoadResult("曲阳路", looktime);
             //mResult.getSpecificRoadResult("中山北一路", looktime);

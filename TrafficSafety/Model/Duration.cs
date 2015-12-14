@@ -81,6 +81,7 @@ namespace TrafficSafety.Model
         /// <param name="spreadCase">2为情况2,3为情况3</param>
         public Duration(double roadLength, W W1,  W W3, double T23, double t0, int spreadCase)
         {
+            if (W1==null || W3==null) throw new Exception("NULL");
             switch (spreadCase)
             {
                 case 2:

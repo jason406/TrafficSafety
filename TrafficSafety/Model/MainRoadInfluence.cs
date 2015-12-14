@@ -262,7 +262,7 @@ namespace TrafficSafety.Model
             W3 = new W(this.road.Vl);//！
             W2b = new W(this.road.Vl);//！
             W1.kind = 1; W2.kind = 2; W3.kind = 4; W1b.kind = 3; W2b.kind = 5;
-
+            
             System.Diagnostics.Debug.WriteLine("主路"+road.RoadID + "," + this.q1);
         }
         private void saveResults()
