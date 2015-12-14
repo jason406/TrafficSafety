@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestSettings name="跟踪和测试影响" id="a4f6a472-77f5-49a0-893b-bcccfe8c569a" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Description>这些设置为跟踪和测试影响的测试设置。</Description>
+  <Execution>
+    <TestTypeSpecific />
+    <AgentRule name="Execution Agents">
+    </AgentRule>
+  </Execution>
+</TestSettings>
