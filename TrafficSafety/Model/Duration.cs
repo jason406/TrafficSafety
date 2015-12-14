@@ -117,8 +117,8 @@ namespace TrafficSafety.Model
             switch (spreadCase)
             {
                 case 1://情况一  w1=1.329 w2=1.303 w3=4.44 w1b=1.303 w2b=4.44 l=53 T12=213 T23=98  t0=1116
-                    t12 = w2 * T12 / (w2 - w1);
-                    t23 = (w3 * (T12 + T23) - w2 * T12) / (w3 - w2);
+                    t12 = w2 * T12 / (w2 - w1);                    
+                    t23 = (w3 * (T12 + T23) - w2 * T12) / (w3 - w2);                    
                     if ((t12 < t23 && t12>0) || t23<=0)//即W2先追上W1，或者W3追不上W2
                     {
                         l12 = w1 * t12;

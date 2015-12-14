@@ -31,7 +31,7 @@ namespace TrafficSafety.Model
 
         public const double TURNING_RATIO = 0.4;//0.3
         public const double STRAIGHT_RATIO = 1.1; //1.02
-        public const double FLOW_RATIO = 0.6;//当前流量和最大流量的比率
+        public const double FLOW_RATIO = 0.7;//当前流量和最大流量的比率
         public const bool CONSIDER_TUNING = true;
         bool[] isReached; //查询标识，如果某条道路查询过了就为true
         RoadSearch roadSearch;
@@ -69,8 +69,8 @@ namespace TrafficSafety.Model
 
                 this._q1 = q1;
                 
-                this._q2 = 0.95*q2  ;//流量折减
-                this._q3 = 0.95*q3 ;
+                this._q2 = q2  ;//流量折减
+                this._q3 = q3 ;
                 
             } 
             else
@@ -397,7 +397,7 @@ namespace TrafficSafety.Model
             if (W1.getW()<=0 || W2.getW()<=0 || W3.getW()<=0 || W1b.getW()<=0 || W2b.getW()<=0 ) throw new Exception("WRONG");
 
             //if (W3.getW() < W1b.getW()) throw new Exception("WRONG");
-            if (this.spreadCase==1 && W2.getW() < W1.getW()) throw new Exception("WRONG");
+            //if ( W2.getW() < W1.getW()) throw new Exception("WRONG");
             //if (W2b.getW() < W1.getW()) throw new Exception("WRONG");
             W1.kind = 1; W2.kind = 2; W3.kind = 4; W1b.kind = 3; W2b.kind = 5;
             //System.Diagnostics.Debug.WriteLine(this.road.RoadID + "," + passTurningCount);

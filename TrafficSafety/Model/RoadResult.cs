@@ -131,6 +131,7 @@ namespace TrafficSafety.Model
             }
             //checkResult(result);
             System.Diagnostics.Debug.WriteLine("事故持续时间：" + this.durationTime);
+            System.Diagnostics.Debug.WriteLine("MAX_t0：" + _max_t0);
             return result;
         }
 
@@ -198,8 +199,8 @@ namespace TrafficSafety.Model
         {
             List<RoadSection> result = processSpeedResult(t);
             //System.IO.StreamWriter sw = new System.IO.StreamWriter(filePath);
-            System.IO.StreamWriter sw = new System.IO.StreamWriter(System.IO.Path.GetDirectoryName(filePath) + System.IO.Path.GetFileNameWithoutExtension(filePath) + this.currentTime + "s_speed.txt");
-            sw.WriteLine("ROADID,CONGLEVEL,START,END,WAVEKIND,t0");
+            System.IO.StreamWriter sw = new System.IO.StreamWriter(System.IO.Path.GetDirectoryName(filePath) + System.IO.Path.GetFileNameWithoutExtension(filePath) +this.mainRoadInfluence.q1+"流量"+ this.currentTime + "s_speed.txt");
+            sw.WriteLine("ROADID,ROADNAME,CONGLEVEL,START,END,WAVEKIND,t0");
             string messageString;
             foreach (RoadSection roadSection in result)
             {

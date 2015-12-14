@@ -8,7 +8,7 @@ namespace TrafficSafety.Model
     class MainRoadInfluence 
     {
         private double T12, T23, t0;
-        private double q1; //事发流量
+        public double q1; //事发流量
         private double q2; //民警处理后流量
         private double q3;
         private AccidentInfo accidentInfo;

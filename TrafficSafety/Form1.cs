@@ -305,7 +305,7 @@ namespace TrafficSafety
             //淮海中路事故
             RoadSection mRoad = new RoadSection(28755, networkDataset);
             ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
-            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 123541, 10, 2, 1, 720, 300, 600, 0); //车道数2 剩余1
+            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 123541, 10, 2, 1, 840, 300, 600, 0); //车道数2 剩余1
         }
         
 #region Arcgis网络路径搜寻
