@@ -393,7 +393,8 @@ namespace TrafficSafety.Model
                     break;                   
 
             }
-            double w3=16/3.6;
+            //新的qm_perlane，和newell模型一致
+            double w3=16;
             double kj=150*this.numOfLane;
             this.qm = this.Vl * w3 * kj / (Vl + w3);
             this.qm_perLane = this.qm / numOfLane;

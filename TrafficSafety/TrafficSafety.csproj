@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="Model\AccidentInfo.cs" />
     <Compile Include="Model\Duration.cs" />
+    <Compile Include="Model\GlobalConst.cs" />
     <Compile Include="Model\K.cs" />
     <Compile Include="Model\MainRoadInfluence.cs" />
     <Compile Include="Model\RoadInfluence.cs" />

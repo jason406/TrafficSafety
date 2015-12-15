@@ -29,10 +29,10 @@ namespace TrafficSafety.Model
         private int passTurningCount = 0;
         private int passStraightCount = 0;
 
-        public const double TURNING_RATIO = 0.4;//0.3
-        public const double STRAIGHT_RATIO = 1.1; //1.02
-        public const double FLOW_RATIO = 0.9;//当前流量和最大流量的比率
-        public const bool CONSIDER_TUNING = true;
+        //public const double TURNING_RATIO = 0.4;//0.3
+        //public const double STRAIGHT_RATIO = 1.1; //1.02
+        //public const double FLOW_RATIO = 0.9;//当前流量和最大流量的比率
+        //public const bool CONSIDER_TUNING = true;
         bool[] isReached; //查询标识，如果某条道路查询过了就为true
         RoadSearch roadSearch;
 
@@ -68,9 +68,9 @@ namespace TrafficSafety.Model
                 //this.q3 = q3 * road.signalSplit;
 
                 this._q1 = q1;
-                
-                this._q2 = q2  ;//流量折减
-                this._q3 = q3 ;
+
+                this._q2 = q2;//流量折减
+                this._q3 = q3;
                 
             } 
             else
@@ -165,7 +165,7 @@ namespace TrafficSafety.Model
         }
         public List<RoadInfluence> breadthFirstExecute()
         {
-            if (this.road.RoadID == 9008)
+            if (this.road.RoadID == 230724)
             {
                 int aaa;
             }
@@ -177,6 +177,7 @@ namespace TrafficSafety.Model
             switch (spreadCase)
             {
                 case 1:
+                    if (W1b.getW() > W3.getW()) throw new Exception("Wrong");
                     duration = new Duration(road.Length, W1, W2, W3, W1b, W2b, T12, T23, t0);
 
                     break;
@@ -292,7 +293,8 @@ namespace TrafficSafety.Model
             K k = new K(this.road.Vl, this.road.kj * this.road.numOfLane);
 
             
-            this.q1 = road.qm_perLane*road.numOfLane*FLOW_RATIO;//实时流量为最大流量的
+            this.q1 = road.qm_perLane*road.numOfLane*GlobalConst.FLOW_RATIO;//实时流量为最大流量的
+            //this.q1 = k.qm * FLOW_RATIO;
             //System.Diagnostics.Debug.WriteLine(road.name + "," + this.q1);
             if (_q2>q1)//_q2为上一段路的q2
             //if (q2 > q1 || q3>q2)
@@ -340,7 +342,7 @@ namespace TrafficSafety.Model
             //W2.setW(W2.getW() * Math.Pow(TURNING_RATIO, this.passTurningCount));
             //W1b.setW(W1b.getW() * Math.Pow(TURNING_RATIO, this.passTurningCount));
 
-            if (CONSIDER_TUNING )//转弯，波速折减
+            if (GlobalConst.CONSIDER_TUNING )//转弯，波速折减
             {
                 if (road.isTuring)
                 {
@@ -357,17 +359,17 @@ namespace TrafficSafety.Model
                 //波速调整
                 if (this.spreadCase == 2)
                 {
-                    W1b.setW(W1b.getW() * Math.Pow(STRAIGHT_RATIO, this.passStraightCount));
+                    W1b.setW(W1b.getW() * Math.Pow(GlobalConst.STRAIGHT_RATIO, this.passStraightCount));
                 }
                 if (this.spreadCase == 3)
                 {
-                    W1.setW(W1.getW() * Math.Pow(STRAIGHT_RATIO, this.passStraightCount));
+                    W1.setW(W1.getW() * Math.Pow(GlobalConst.STRAIGHT_RATIO, this.passStraightCount));
                 }
                 if (this.spreadCase == 1)
                 {
-                    W1.setW(W1.getW() * Math.Pow(STRAIGHT_RATIO, this.passStraightCount));
-                    W2.setW(W2.getW() * Math.Pow(STRAIGHT_RATIO, this.passStraightCount));
-                    W1b.setW(W1b.getW() * Math.Pow(STRAIGHT_RATIO, this.passStraightCount));
+                    W1.setW(W1.getW() * Math.Pow(GlobalConst.STRAIGHT_RATIO, this.passStraightCount));
+                    W2.setW(W2.getW() * Math.Pow(GlobalConst.STRAIGHT_RATIO, this.passStraightCount));
+                    W1b.setW(W1b.getW() * Math.Pow(GlobalConst.STRAIGHT_RATIO, this.passStraightCount));
                 }
                 
                 road.passTurningCount = this.passTurningCount;
@@ -386,9 +388,9 @@ namespace TrafficSafety.Model
                 
 
             }
-            W1.setW(W1.getW() * Math.Pow(TURNING_RATIO, this.passTurningCount));
-            W2.setW(W2.getW() * Math.Pow(TURNING_RATIO, this.passTurningCount));
-            W1b.setW(W1b.getW() * Math.Pow(TURNING_RATIO, this.passTurningCount));
+            W1.setW(W1.getW() * Math.Pow(GlobalConst.TURNING_RATIO, this.passTurningCount));
+            W2.setW(W2.getW() * Math.Pow(GlobalConst.TURNING_RATIO, this.passTurningCount));
+            W1b.setW(W1b.getW() * Math.Pow(GlobalConst.TURNING_RATIO, this.passTurningCount));
 
             W3 = new W(this.road.Vl);//！
             W2b = new W(this.road.Vl);//！
@@ -410,18 +412,18 @@ namespace TrafficSafety.Model
         private void checkWaveSpeed()//让集结波波速小于启动波速
         {
 
-            double val=0.5;
+            double val=0.01;
             double vl = 16 / 3.6; //启动波速
 
-            if (Math.Abs(W1.getW() -vl)< val)
+            if (vl-W1.getW()< val)
             {
                 W1.setW(vl - val);
             }
-            if (Math.Abs(W2.getW() - vl) < val)
+            if (vl-W2.getW() < val)
             {
                 W2.setW(vl - val);
             }
-            if (Math.Abs(W1b.getW() - vl) < val)
+            if (vl-W1b.getW() < val)
             {
                 W1b.setW(vl - val);
             }

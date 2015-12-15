@@ -244,7 +244,7 @@ namespace TrafficSafety.Model
         private void makeW()
         {
             K k = new K(this.road.Vl, this.road.kj * this.road.numOfLane);
-
+            this.q1 = road.qm_perLane * road.numOfLane * GlobalConst.FLOW_RATIO;
             this.q2 = this.numOfLaneLeft * this.road.qm_perLane;
 
             if (this.q2 > this.q1) q2 = q1 * 0.8;
