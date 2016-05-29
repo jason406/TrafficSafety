@@ -21,6 +21,7 @@ namespace TrafficSafety.Model
         private List<zone> yellowZone = new List<zone>();
         private List<zone> greenZone= new List<zone>();
         private MainRoadInfluence mainRoadInfluence;
+        private List<RoadSection> specificResult = new List<RoadSection>();
         public RoadResult(MainRoadInfluence mainRoadInfluence)
         {
             this.durationTime = 0;
@@ -106,8 +107,9 @@ namespace TrafficSafety.Model
         private List<RoadSection> processSpeedResult(double t)
         {
             //removeRepeatedResult();
-            List<RoadSection> result;
-            result = this.mainRoadInfluence.roadResults;
+            List<RoadSection> result = new List<RoadSection>();
+            //result = this.mainRoadInfluence.roadResults;
+            this.mainRoadInfluence.roadResults.ForEach(i => result.Add(i));
             this.currentTime = t;
             double _max_t0=0;
             //System.IO.StreamWriter sw = new System.IO.StreamWriter("D:\roadResult.txt");
@@ -129,21 +131,28 @@ namespace TrafficSafety.Model
                 roadSection.getSpeedResult(t);
 
             }
-            //checkResult(result);
+            System.Diagnostics.Debug.WriteLine("查看时间：" + t + "结果数量：" + result.Count());
             System.Diagnostics.Debug.WriteLine("事故持续时间：" + this.durationTime);
             System.Diagnostics.Debug.WriteLine("MAX_t0：" + _max_t0);
+            System.Diagnostics.Debug.WriteLine("check之前：" + result.Count());
+            checkResult(result);
+            System.Diagnostics.Debug.WriteLine("check之后：" + result.Count());
             return result;
         }
 
         public void checkResult(List<RoadSection> result)
         {
-            foreach (RoadSection roadSection in result)
+            List<int> noResultIdx= new List<int>(); //没有结果的Index
+            for (int i = 0; i < result.Count;i++ )
             {
+                RoadSection roadSection = result[i];
+
+
                 if (roadSection.spreadCase == 0 || roadSection.spreadCaseNext == 0)
                 {
                     System.Diagnostics.Debug.WriteLine("路段" + roadSection.RoadID + "传播情况有误");
                 }
-                if (roadSection.W1 != null && roadSection.W1.timeOfDeparture==0)
+                if (roadSection.W1 != null && roadSection.W1.timeOfDeparture == 0)
                 {
                     System.Diagnostics.Debug.WriteLine("W1 time有误");
                 }
@@ -165,22 +174,22 @@ namespace TrafficSafety.Model
                 }
                 string messageString = "";
                 int count = 0;
-                if (roadSection.W1 != null )
+                if (roadSection.W1 != null)
                 {
                     messageString += "W1:" + roadSection.W1.v2;
                     count++;
                 }
-                if (roadSection.W2 != null )
+                if (roadSection.W2 != null)
                 {
                     messageString += ",W2:" + roadSection.W2.v2;
                     count++;
                 }
-                if (roadSection.W3 != null )
+                if (roadSection.W3 != null)
                 {
                     messageString += ",W3:" + roadSection.W3.v2;
                     count++;
                 }
-                if (roadSection.W1b != null )
+                if (roadSection.W1b != null)
                 {
                     messageString += ",W1b:" + roadSection.W1b.v2;
                     count++;
@@ -190,17 +199,29 @@ namespace TrafficSafety.Model
                     messageString += ",W2b:" + roadSection.W2b.v2;
                     count++;
                 }
-                System.Diagnostics.Debug.WriteLine(messageString);
+                //System.Diagnostics.Debug.WriteLine(messageString);
                 if (count < 2) throw new Exception("COunt!");
             }
+
+            for (int i = result.Count-1; i > 0;i-- )
+            {
+                RoadSection roadSection = result[i];
+                if (roadSection.speedResultZone.Count == 0)
+                {
+                    result.RemoveAt(i);
+                }
+            }
+
+
         }
 
         public void saveSpeedResulttoFile(double t,string filePath)
         {
             List<RoadSection> result = processSpeedResult(t);
             //System.IO.StreamWriter sw = new System.IO.StreamWriter(filePath);
-            System.IO.StreamWriter sw = new System.IO.StreamWriter(System.IO.Path.GetDirectoryName(filePath) + System.IO.Path.GetFileNameWithoutExtension(filePath) +this.mainRoadInfluence.q1+"流量"+ this.currentTime + "s_speed.txt");
-            sw.WriteLine("ROADID,ROADNAME,CONGLEVEL,START,END,WAVEKIND,t0");
+            //string test = (System.IO.Path.GetDirectoryName(filePath) + System.IO.Path.GetFileNameWithoutExtension(filePath) +this.mainRoadInfluence.road.name+ this.currentTime + "s_speed.txt");
+            System.IO.StreamWriter sw = new System.IO.StreamWriter(System.IO.Path.GetDirectoryName(filePath) + System.IO.Path.GetFileNameWithoutExtension(filePath) +this.mainRoadInfluence.road.name+ this.currentTime + "s_speed.txt");
+            sw.WriteLine("ROADID,ROADNAME,CONGLEVEL,START,END,WAVEKIND,t0,passStraight,passTurning");
             string messageString;
             foreach (RoadSection roadSection in result)
             {
@@ -210,7 +231,7 @@ namespace TrafficSafety.Model
                     {
                         int bbb;
                     }
-                    messageString = roadSection.RoadID.ToString() + "," +roadSection.name.ToString()+","+ resultZones.congestionLevel + "," + resultZones.start + "," + resultZones.end + "," + resultZones.waveKind + "," + resultZones.t0 ;
+                    messageString = roadSection.RoadID.ToString() + "," + roadSection.name.ToString() + "," + resultZones.congestionLevel + "," + resultZones.start + "," + resultZones.end + "," + resultZones.waveKind + "," + resultZones.t0 + "," + roadSection.passStraightCount + "," + roadSection.passTurningCount;
                     //messageString = roadSection.RoadID.ToString() + "," + resultZones.congestionLevel + "," + resultZones.start + "," + resultZones.end + "," + resultZones.waveKind + "," + resultZones.t0;
                     sw.WriteLine(messageString);
                 }
@@ -321,17 +342,25 @@ namespace TrafficSafety.Model
             for (int i = 0; i < lookTime.Length;i++ )
             {
                 influenceLength = 0;
-                List<RoadSection> result = processSpeedResult(lookTime[i]);
+                List<RoadSection> result = new List<RoadSection>();
+                result = processSpeedResult(lookTime[i]);
 
 
-                List<RoadSection> specificResult = new List<RoadSection>();
-                
+
+                List<int> specificResultRoadIDs = new List<int>();
                 System.Diagnostics.Debug.WriteLine("时间:" + lookTime[i]);
                 foreach (RoadSection roadSection in result)
                 {
-                    if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=51 && roadSection.speedResultZone.Count>0) //passturningcount=1为曲阳路 =0是四平路
+                    //if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=51 && roadSection.speedResultZone.Count>0) //passturningcount=1为曲阳路 =0是四平路
+                    if ((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == 0 && roadSection.speedResultZone.Count > 0) || (roadSection.speedResultZone.Count > 0 && roadSection.name == "淞沪路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "邯郸路")) //passturningcount=1为曲阳路 =0是四平路
                     {
-                        specificResult.Add(roadSection);
+                        if (!isResultExist(roadSection)) specificResult.Add(roadSection);
+                        //specificResult.Add(roadSection);
+                        specificResultRoadIDs.Add(roadSection.RoadID);
+                        if (roadSection.name=="邯郸路")
+                        {
+                            int bbb;
+                        }
                         foreach (Zone resultZones in roadSection.speedResultZone)
                         {
                             
@@ -339,21 +368,34 @@ namespace TrafficSafety.Model
                         }
                     }
                 }
-                
 
-                
+                specificResultRoadIDs = specificResultRoadIDs.Distinct().ToList();
+                System.Diagnostics.Debug.WriteLine("结果数：" + specificResult.Count);
+
+
                 for (int j = 0; j < specificResult.Count; j++)
                 {
                     RoadSection roadSection = specificResult[j];
-                    if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=51)
+                    System.Diagnostics.Debug.WriteLine("路段名字："+roadSection.name+",passturning:"+roadSection.passTurningCount+",passStraight:"+roadSection.passStraightCount);
+                    if (true)
                     {
                         if (j==specificResult.Count-1)
                         {
+                            if (roadSection.speedResultZone.Count > 1)
+                            {
+                                //throw new Exception("count >1");
+
+                            }
                             foreach (Zone resultZones in roadSection.speedResultZone)
                             {
+                                //if (Math.Abs(resultZones.end - resultZones.start-roadSection.Length)>1)
+                                //{
+                                //    throw new Exception("length variance >1");
+
+                                //}
                                 
                                 influenceLength += resultZones.end - resultZones.start;
-                                System.Diagnostics.Debug.WriteLine("时间：" + lookTime[i] + "，拥堵最长到:" + roadSection.RoadID);
+                                System.Diagnostics.Debug.WriteLine("时间：" + lookTime[i] + "，拥堵最长到:" + roadSection.name);
                             }
                         } 
                         else
@@ -411,5 +453,17 @@ namespace TrafficSafety.Model
             return results;
         }
 
+        private bool isResultExist(RoadSection roadSection)
+        {
+            bool isExist = false;
+            foreach (RoadSection rs in specificResult)
+            {
+                if (roadSection.RoadID == rs.RoadID)
+                {
+                    isExist = true;
+                }
+            }
+            return isExist;
+        }
     }
 }

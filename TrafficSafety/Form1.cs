@@ -274,38 +274,7 @@ namespace TrafficSafety
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            workspace = OpenWorkspace(txtWorkspacePath);
-            INetworkDataset networkDataset = OpenNetworkDataset(workspace, txtFeatureDataset, txtNetworkDataset); //读取网络数据集
-            //DisplayNetworkAdjacencyInMessageBox(networkDataset);
-            string[] aaa = {"Oneway"};            
-            //int test = BreadthFirstSearch(networkDataset, 90, 91, aaa);
-
-            //List<RoadSection> results = searchRoad(274032,5211, networkDataset);
-            //List<RoadSection> newResults = new List<RoadSection>();
-            //foreach (RoadSection road in results)
-            //{
-            //    newResults.AddRange(searchRoad(Convert.ToInt32(road.RoadID),road.startNode, networkDataset));
-            //}
-
-            //RoadSection mRoad = new RoadSection(72928,networkDataset);            
-            //MainRoadInfluence mMainroad = new MainRoadInfluence(networkDataset, mRoad,155696, 300, 3, 1, 3000, 1800, 200, 300);
-            //曲阳路事故
-            //RoadSection mRoad = new RoadSection(72933, networkDataset);
-            ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
-            //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 155149,5,2 , 1, 1000,  300, 600, 0); //车道数2 剩余1
-            //泰梅路事故
-            //RoadSection mRoad = new RoadSection(183778, networkDataset);
-            //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 234584, 10, 2, 1, 1000, 300, 600, 0);
-
-            //中山北一路事故
-            //RoadSection mRoad = new RoadSection(71428, networkDataset);
-            ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
-            //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 148740, 5, 2, 1, 500, 300, 420, 0); //车道数2 剩余1
-
-            //淮海中路事故
-            RoadSection mRoad = new RoadSection(28755, networkDataset);
-            ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
-            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 123541, 10, 2, 1, 1080, 300, 600, 0); //车道数2 剩余1
+            
         }
         
 #region Arcgis网络路径搜寻
@@ -533,10 +502,60 @@ throw new System.Exception("Destination unreachable");
         {
             RoadResult mResult = new RoadResult(mMainroad);
             int[] looktime = new int[6] { 150, 300, 450, 600, 750, 3000 };
-            //mResult.getSpecificRoadResult("四平路", looktime);
+            double[] influenceLength = mResult.getSpecificRoadResult("四平路", looktime);
             //mResult.getSpecificRoadResult("曲阳路", looktime);
             //mResult.getSpecificRoadResult("中山北一路", looktime);
-            mResult.getSpecificRoadResult("淮海中路", looktime);
+            //mResult.getSpecificRoadResult("淮海中路", looktime);
+            double durationTime=mResult.durationTime;
+            toolStripStatusLabel1.Text = "traffic load:" + GlobalConst.FLOW_RATIO;
+            toolStripStatusLabel1.Text += "，持续时间：" + durationTime;
+            toolStripStatusLabel1.Text += "，影响长度：" + influenceLength[5];
+        }
+
+        private void 参数设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSettings settings = new FrmSettings();
+            settings.ShowDialog();
+            toolStripStatusLabel1.Text = "正在计算………………";
+            运行ToolStripMenuItem_Click(sender, e);
+        }
+
+        private void 运行ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "正在计算………………";
+            workspace = OpenWorkspace(txtWorkspacePath);
+            INetworkDataset networkDataset = OpenNetworkDataset(workspace, txtFeatureDataset, txtNetworkDataset); //读取网络数据集
+            //DisplayNetworkAdjacencyInMessageBox(networkDataset);            
+            string[] aaa = { "Oneway" };
+            //int test = BreadthFirstSearch(networkDataset, 90, 91, aaa);
+
+            //List<RoadSection> results = searchRoad(274032,5211, networkDataset);
+            //List<RoadSection> newResults = new List<RoadSection>();
+            //foreach (RoadSection road in results)
+            //{
+            //    newResults.AddRange(searchRoad(Convert.ToInt32(road.RoadID),road.startNode, networkDataset));
+            //}
+
+            //RoadSection mRoad = new RoadSection(72928,networkDataset);            
+            //MainRoadInfluence mMainroad = new MainRoadInfluence(networkDataset, mRoad,155696, 300, 3, 1, 3000, 1800, 200, 300);
+            ////曲阳路事故
+            RoadSection mRoad = new RoadSection(72933, networkDataset);
+            //(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
+            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 155149, 5, 2, 1, 1000, 300, 600, 0); //车道数2 剩余1
+            //泰梅路事故
+            //RoadSection mRoad = new RoadSection(183778, networkDataset);
+            //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 234584, 10, 2, 1, 1000, 300, 600, 0);
+
+            //中山北一路事故
+            //RoadSection mRoad = new RoadSection(71428, networkDataset);
+            ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
+            //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 148740, 5, 2, 1, 500, 300, 420, 0); //车道数2 剩余1
+
+            //淮海中路事故
+            //RoadSection mRoad = new RoadSection(28755, networkDataset);
+            ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
+            //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 123541, 10, 2, 1, 1080, 300, 600, 0); //车道数2 剩余1
+            toolStripStatusLabel1.Text = "计算完成！";
         }
     }
 }

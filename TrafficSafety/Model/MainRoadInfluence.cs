@@ -26,7 +26,7 @@ namespace TrafficSafety.Model
         bool[] isReached; //查询标识，如果某条道路查询过了就为true
         RoadSearch roadSearch;
         private Duration duration;
-        private RoadSection road;//当前路段
+        public RoadSection road;//当前路段
         private double _accidentPoint;
         public double accidentPoint//事故点到道路起始点的距离米（线性参考）
         {

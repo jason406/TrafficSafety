@@ -499,6 +499,10 @@ namespace TrafficSafety.Model
                     _speedResultZone.Add(new Zone(this,W.v2, W.locationOfArrive, W.locationOfDeparture,W.kind, W.timeOfArrive,t));
                 }
             }
+            else
+            {
+                //throw new Exception("W=null");
+            }
 
             //for (int i = 0; i < _speedResultZone.Count; i++)
             //{

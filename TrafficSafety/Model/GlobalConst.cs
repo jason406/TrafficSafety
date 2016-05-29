@@ -7,9 +7,9 @@ namespace TrafficSafety.Model
 {
     public class GlobalConst
     {
-        public const double TURNING_RATIO = 0.4;//0.3
-        public const double STRAIGHT_RATIO = 1.01; //1.02
-        public const double FLOW_RATIO = 0.1;//当前流量和最大流量的比率
-        public const bool CONSIDER_TUNING = true;
+        public static double TURNING_RATIO = 0.3;//0.3
+        public static double STRAIGHT_RATIO = 1.01; //1.02
+        public static double FLOW_RATIO = 0.6;//当前流量和最大流量的比率
+        public static bool CONSIDER_TUNING = true;
     }
 }
