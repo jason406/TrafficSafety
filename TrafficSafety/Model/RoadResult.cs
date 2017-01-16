@@ -352,7 +352,8 @@ namespace TrafficSafety.Model
                 foreach (RoadSection roadSection in result)
                 {
                     //if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=51 && roadSection.speedResultZone.Count>0) //passturningcount=1为曲阳路 =0是四平路
-                    if ((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == 0 && roadSection.speedResultZone.Count > 0) || (roadSection.speedResultZone.Count > 0 && roadSection.name == "淞沪路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "邯郸路")) //passturningcount=1为曲阳路 =0是四平路
+                    if ((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == 1 && roadSection.name==roadName)) //曲阳路
+                    //if ((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == (roadName=="曲阳路"? 1:0) && roadSection.speedResultZone.Count > 0) || (roadSection.speedResultZone.Count > 0 && roadSection.name == "水芸路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "环湖西一路")) //passturningcount=1为曲阳路 =0是四平路
                     {
                         if (!isResultExist(roadSection)) specificResult.Add(roadSection);
                         //specificResult.Add(roadSection);
@@ -376,7 +377,7 @@ namespace TrafficSafety.Model
                 for (int j = 0; j < specificResult.Count; j++)
                 {
                     RoadSection roadSection = specificResult[j];
-                    System.Diagnostics.Debug.WriteLine("路段名字："+roadSection.name+",passturning:"+roadSection.passTurningCount+",passStraight:"+roadSection.passStraightCount);
+                    System.Diagnostics.Debug.WriteLine("ID:"+roadSection.RoadID+" 路段名字："+roadSection.name+",passturning:"+roadSection.passTurningCount+",passStraight:"+roadSection.passStraightCount);
                     if (true)
                     {
                         if (j==specificResult.Count-1)

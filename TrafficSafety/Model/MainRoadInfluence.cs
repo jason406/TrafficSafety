@@ -47,7 +47,7 @@ namespace TrafficSafety.Model
         
 
         public MainRoadInfluence(ESRI.ArcGIS.Geodatabase.INetworkDataset networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
-            
+        //   numOfLane没用，会在道路信息里提供
         {
             this.networkDataset = networkDataset;
             var networkQuery = networkDataset as ESRI.ArcGIS.Geodatabase.INetworkQuery; //创建networkQuery，旨在初始化查询标记变量
