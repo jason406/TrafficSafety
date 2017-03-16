@@ -38,12 +38,14 @@
             this.运行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infulenceLengthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.maxInfluenceTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.axToolbarControl1 = new ESRI.ArcGIS.Controls.AxToolbarControl();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.axTOCControl1 = new ESRI.ArcGIS.Controls.AxTOCControl();
             this.axMapControl1 = new ESRI.ArcGIS.Controls.AxMapControl();
+            this.saveToDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -87,7 +89,9 @@
             this.参数设置ToolStripMenuItem,
             this.运行ToolStripMenuItem,
             this.testToolStripMenuItem,
-            this.infulenceLengthToolStripMenuItem});
+            this.infulenceLengthToolStripMenuItem,
+            this.maxInfluenceTimeToolStripMenuItem,
+            this.saveToDBToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(975, 28);
@@ -121,6 +125,13 @@
             this.infulenceLengthToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
             this.infulenceLengthToolStripMenuItem.Text = "infulenceLength";
             this.infulenceLengthToolStripMenuItem.Click += new System.EventHandler(this.infulenceLengthToolStripMenuItem_Click);
+            // 
+            // maxInfluenceTimeToolStripMenuItem
+            // 
+            this.maxInfluenceTimeToolStripMenuItem.Name = "maxInfluenceTimeToolStripMenuItem";
+            this.maxInfluenceTimeToolStripMenuItem.Size = new System.Drawing.Size(159, 24);
+            this.maxInfluenceTimeToolStripMenuItem.Text = "Max influence time";
+            this.maxInfluenceTimeToolStripMenuItem.Click += new System.EventHandler(this.maxInfluenceTimeToolStripMenuItem_Click);
             // 
             // splitContainer1
             // 
@@ -194,6 +205,13 @@
             this.axMapControl1.Size = new System.Drawing.Size(779, 402);
             this.axMapControl1.TabIndex = 0;
             // 
+            // saveToDBToolStripMenuItem
+            // 
+            this.saveToDBToolStripMenuItem.Name = "saveToDBToolStripMenuItem";
+            this.saveToDBToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
+            this.saveToDBToolStripMenuItem.Text = "save to DB";
+            this.saveToDBToolStripMenuItem.Click += new System.EventHandler(this.saveToDBToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -243,6 +261,8 @@
         private System.Windows.Forms.ToolStripMenuItem 参数设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 运行ToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripMenuItem maxInfluenceTimeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToDBToolStripMenuItem;
     }
 }
 

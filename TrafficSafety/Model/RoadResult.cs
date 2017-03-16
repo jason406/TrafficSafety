@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.OleDb;
 
 namespace TrafficSafety.Model
 {
@@ -22,6 +23,11 @@ namespace TrafficSafety.Model
         private List<zone> greenZone= new List<zone>();
         private MainRoadInfluence mainRoadInfluence;
         private List<RoadSection> specificResult = new List<RoadSection>();
+        struct congestedLength
+        {
+            public int t;
+            public int length;
+        }
         public RoadResult(MainRoadInfluence mainRoadInfluence)
         {
             this.durationTime = 0;
@@ -227,10 +233,7 @@ namespace TrafficSafety.Model
             {
                 foreach (Zone resultZones in roadSection.speedResultZone)
                 {
-                    if (resultZones.road.RoadID == 109933)
-                    {
-                        int bbb;
-                    }
+                   
                     messageString = roadSection.RoadID.ToString() + "," + roadSection.name.ToString() + "," + resultZones.congestionLevel + "," + resultZones.start + "," + resultZones.end + "," + resultZones.waveKind + "," + resultZones.t0 + "," + roadSection.passStraightCount + "," + roadSection.passTurningCount;
                     //messageString = roadSection.RoadID.ToString() + "," + resultZones.congestionLevel + "," + resultZones.start + "," + resultZones.end + "," + resultZones.waveKind + "," + resultZones.t0;
                     sw.WriteLine(messageString);
@@ -250,6 +253,109 @@ namespace TrafficSafety.Model
                  //测试代码结束             
             }
             sw.Close();
+            
+        }
+
+        public double getMaxInfluenceTime()
+        {
+
+            List<RoadSection> results = processSpeedResult(mainRoadInfluence.T12);
+            
+            List<congestedLength> congestedLengthTime = new List<congestedLength>();
+            congestedLength m_ongestedLengthTime = new congestedLength();
+            int t = (int)(mainRoadInfluence.T12);
+            int ans = t;
+            double maxLength = 0;
+            while (t < this.durationTime)
+            {
+                results = processSpeedResult(t);
+                m_ongestedLengthTime.t = t;
+                m_ongestedLengthTime.length = 0;
+                foreach (var roadResult in results)
+                {
+                    foreach (var resultZone in roadResult.speedResultZone)
+                    {
+                        if (resultZone.congestionLevel > 3)
+                        {                            
+                            m_ongestedLengthTime.length +=(int) (resultZone.end - resultZone.start);
+                        }
+                    }
+                }
+                congestedLengthTime.Add(m_ongestedLengthTime);
+                if (m_ongestedLengthTime.length > maxLength)
+                {
+                    maxLength = m_ongestedLengthTime.length;
+                    ans = m_ongestedLengthTime.t;
+                }
+                t = t + 10;
+            }
+
+            
+            return ans;
+        }
+        public void saveResultToDatabase(double t)
+        {
+            List<RoadSection> result = processSpeedResult(t);
+
+
+            string connstr = "Provider=Microsoft.Jet.OLEDB.4.0 ;Data Source=D:\\事故模拟\\陆家浜路\\lujiabang.mdb";
+            string tableName = this.mainRoadInfluence.road.name + this.currentTime;
+            OleDbConnection myConn = new OleDbConnection(connstr);
+            myConn.Open();
+            string SQL_createTable = "CREATE TABLE " + tableName + " (";
+            SQL_createTable += "ROADID  INT,";
+            SQL_createTable += "CONGLEVEL   INT,";
+            SQL_createTable += "STARTPOS   decimal(10,2),";
+            SQL_createTable += "ENDPOS     decimal(10,2)";
+            SQL_createTable += " )";
+            
+            OleDbCommand myCommand = new OleDbCommand(SQL_createTable,myConn);
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (System.Exception ex)
+            {
+                //System.Windows.Forms.MessageBox.Show(ex.Message);
+            }
+            string messageString;
+            OleDbCommand insertCommand = new OleDbCommand();
+            insertCommand.Connection = myConn;
+            insertCommand.Transaction = myConn.BeginTransaction();
+            List<string> cmdStrings = new List<string>();
+            foreach (RoadSection roadSection in result)
+            {
+                foreach (Zone resultZones in roadSection.speedResultZone)
+                {
+                    string SQL_insert = "INSERT INTO " + tableName + " VALUES ";
+                    //messageString = roadSection.RoadID.ToString() + "," + roadSection.name.ToString() + "," + resultZones.congestionLevel + "," + resultZones.start + "," + resultZones.end + "," + resultZones.waveKind + "," + resultZones.t0 + "," + roadSection.passStraightCount + "," + roadSection.passTurningCount;
+                    //messageString = roadSection.RoadID.ToString() + "," + resultZones.congestionLevel + "," + resultZones.start + "," + resultZones.end + "," + resultZones.waveKind + "," + resultZones.t0;
+                    SQL_insert += " ( ";
+                    SQL_insert += roadSection.RoadID + ",";
+                    SQL_insert += resultZones.congestionLevel + ",";
+                    SQL_insert += resultZones.start + ",";
+                    SQL_insert += resultZones.end;
+                    SQL_insert += " )";
+                    cmdStrings.Add(SQL_insert);
+                }
+        
+            }
+            try
+            {
+                foreach (var insertString in cmdStrings)
+                {
+                    insertCommand.CommandText = insertString;
+                    insertCommand.ExecuteNonQuery();
+                }
+                insertCommand.Transaction.Commit();
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+                insertCommand.Transaction.Rollback();
+            }            
+
+            myConn.Close();
             
         }
 
@@ -352,8 +458,9 @@ namespace TrafficSafety.Model
                 foreach (RoadSection roadSection in result)
                 {
                     //if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=51 && roadSection.speedResultZone.Count>0) //passturningcount=1为曲阳路 =0是四平路
-                    if ((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == 1 && roadSection.name==roadName)) //曲阳路
-                    //if ((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == (roadName=="曲阳路"? 1:0) && roadSection.speedResultZone.Count > 0) || (roadSection.speedResultZone.Count > 0 && roadSection.name == "水芸路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "环湖西一路")) //passturningcount=1为曲阳路 =0是四平路
+                    //((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == 0 && roadSection.name==roadName)) //曲阳路
+                    if ((roadSection.speedResultZone.Count > 0 && roadSection.name == "环湖西一路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "申港大道"))
+                    //if ((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == 0 && roadSection.speedResultZone.Count > 0) || (roadSection.speedResultZone.Count > 0 && roadSection.name == "水芸路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "环湖西一路")) //passturningcount=1为曲阳路 =0是四平路
                     {
                         if (!isResultExist(roadSection)) specificResult.Add(roadSection);
                         //specificResult.Add(roadSection);

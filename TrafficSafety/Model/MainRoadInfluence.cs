@@ -7,7 +7,7 @@ namespace TrafficSafety.Model
 {
     class MainRoadInfluence 
     {
-        private double T12, T23, t0;
+        public double T12, T23, t0;
         public double q1; //事发流量
         private double q2; //民警处理后流量
         private double q3;
@@ -49,6 +49,7 @@ namespace TrafficSafety.Model
         public MainRoadInfluence(ESRI.ArcGIS.Geodatabase.INetworkDataset networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
         //   numOfLane没用，会在道路信息里提供
         {
+            GlobalConst.numProcessedRoads = 0;
             this.networkDataset = networkDataset;
             var networkQuery = networkDataset as ESRI.ArcGIS.Geodatabase.INetworkQuery; //创建networkQuery，旨在初始化查询标记变量
             isReached = new bool[networkQuery.get_MaxEID(ESRI.ArcGIS.Geodatabase.esriNetworkElementType.esriNETEdge) + 1];

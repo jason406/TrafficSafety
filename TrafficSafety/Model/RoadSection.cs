@@ -154,10 +154,7 @@ namespace TrafficSafety.Model
 
         public List<RoadSection> searchRoad(int inputRoadID, bool isAlongDigitized, int startNodeID, ESRI.ArcGIS.Geodatabase.INetworkDataset networkDataset, ref RoadSearch roadSearch)
         {
-            if (inputRoadID == 77164)
-            {
-                //System.Diagnostics.Debug.WriteLine("12121");
-            }
+            GlobalConst.numProcessedRoads++;
             //Debug.WriteLine("当前路段：" + inputRoadID + " 开始节点：" + startNodeID);
             List<RoadSection> results = new List<RoadSection>();//输出结果
 

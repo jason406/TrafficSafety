@@ -501,8 +501,8 @@ throw new System.Exception("Destination unreachable");
         private void infulenceLengthToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RoadResult mResult = new RoadResult(mMainroad);
-            int[] looktime = new int[7] { 150, 300, 450, 600, 750,900, 1400 };
-            double[] influenceLength = mResult.getSpecificRoadResult("曲阳路", looktime);
+            int[] looktime = new int[7] { 150, 300, 450, 600, 900,1000, 1400 };
+            double[] influenceLength = mResult.getSpecificRoadResult("申港大道", looktime);
             //mResult.getSpecificRoadResult("曲阳路", looktime);
             //mResult.getSpecificRoadResult("中山北一路", looktime);
             //mResult.getSpecificRoadResult("淮海中路", looktime);
@@ -540,9 +540,9 @@ throw new System.Exception("Destination unreachable");
             //RoadSection mRoad = new RoadSection(72928,networkDataset);            
             //MainRoadInfluence mMainroad = new MainRoadInfluence(networkDataset, mRoad,155696, 300, 3, 1, 3000, 1800, 200, 300);
             ////曲阳路事故
-            RoadSection mRoad = new RoadSection(72933, networkDataset);
-            //(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
-            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 155149, 5, 2, 1, 1000, 300, 600, 0); //车道数2 剩余1
+            //RoadSection mRoad = new RoadSection(72933, networkDataset);
+            ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
+            //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 155149, 5, 2, 1, 1000, 300, 600, 0); //车道数2 剩余1
             //申港大道路事故
             //RoadSection mRoad = new RoadSection(183778, networkDataset);
             //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 234584, 10, 2, 1, 1000, 300, 600, 0);
@@ -556,13 +556,30 @@ throw new System.Exception("Destination unreachable");
             //RoadSection mRoad = new RoadSection(28755, networkDataset);
             ////(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
             //mMainroad = new MainRoadInfluence(networkDataset, mRoad, 123541, 10, 2, 1, 1080, 300, 600, 0); //车道数2 剩余1
+            //陆家浜路事故
+            RoadSection mRoad = new RoadSection(28843, networkDataset);
+            //(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
+            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 147151, 10, 3, 1, 1080, 300, 600, 0); //车道数2 剩余1
             
             
             DateTime oTimeEnd = DateTime.Now;   //获取结束时间
             TimeSpan oTime = oTimeEnd.Subtract(oTimeBegin); //求时间差的函数
 
             Console.WriteLine(oTime.ToString());
-            toolStripStatusLabel1.Text = "计算完成！耗时"+ oTime.ToString() ;
+            int num=GlobalConst.numProcessedRoads;
+            toolStripStatusLabel1.Text = "计算完成！耗时"+ oTime.ToString() +"，道路数量："+num;
+        }
+
+        private void maxInfluenceTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RoadResult mResult = new RoadResult(mMainroad);
+            double time1 = mResult.getMaxInfluenceTime();
+        }
+
+        private void saveToDBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RoadResult mResult = new RoadResult(mMainroad);
+            mResult.saveResultToDatabase(900);
         }
     }
 }
