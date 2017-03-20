@@ -297,7 +297,7 @@ namespace TrafficSafety.Model
         {
             List<RoadSection> result = processSpeedResult(t);
 
-
+            //创建表格
             string connstr = "Provider=Microsoft.Jet.OLEDB.4.0 ;Data Source=D:\\事故模拟\\陆家浜路\\lujiabang.mdb";
             string tableName = this.mainRoadInfluence.road.name + this.currentTime;
             OleDbConnection myConn = new OleDbConnection(connstr);
@@ -318,7 +318,22 @@ namespace TrafficSafety.Model
             {
                 //System.Windows.Forms.MessageBox.Show(ex.Message);
             }
-            string messageString;
+            //清除原有数据
+            string SQL_truncate = "DELETE * FROM " + tableName;
+            myCommand.CommandText = SQL_truncate;
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+            }
+
+
+
+
+            
             OleDbCommand insertCommand = new OleDbCommand();
             insertCommand.Connection = myConn;
             insertCommand.Transaction = myConn.BeginTransaction();
@@ -450,16 +465,15 @@ namespace TrafficSafety.Model
                 influenceLength = 0;
                 List<RoadSection> result = new List<RoadSection>();
                 result = processSpeedResult(lookTime[i]);
-
-
-
                 List<int> specificResultRoadIDs = new List<int>();
                 System.Diagnostics.Debug.WriteLine("时间:" + lookTime[i]);
+
+
                 foreach (RoadSection roadSection in result)
                 {
-                    //if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=51 && roadSection.speedResultZone.Count>0) //passturningcount=1为曲阳路 =0是四平路
+                    if (roadSection.passTurningCount == 0 && roadSection.passStraightCount<=100 && roadSection.speedResultZone.Count>0) //passturningcount=1为曲阳路 =0是四平路
                     //((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == 0 && roadSection.name==roadName)) //曲阳路
-                    if ((roadSection.speedResultZone.Count > 0 && roadSection.name == "环湖西一路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "申港大道"))
+                    //if ((roadSection.speedResultZone.Count > 0 && roadSection.name == "环湖西一路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "申港大道"))
                     //if ((roadSection.speedResultZone.Count > 0 && roadSection.passTurningCount == 0 && roadSection.speedResultZone.Count > 0) || (roadSection.speedResultZone.Count > 0 && roadSection.name == "水芸路") || (roadSection.speedResultZone.Count > 0 && roadSection.name == "环湖西一路")) //passturningcount=1为曲阳路 =0是四平路
                     {
                         if (!isResultExist(roadSection)) specificResult.Add(roadSection);

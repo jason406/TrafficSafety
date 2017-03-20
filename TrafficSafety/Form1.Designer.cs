@@ -39,13 +39,13 @@
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infulenceLengthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.maxInfluenceTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.axToolbarControl1 = new ESRI.ArcGIS.Controls.AxToolbarControl();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.axTOCControl1 = new ESRI.ArcGIS.Controls.AxTOCControl();
             this.axMapControl1 = new ESRI.ArcGIS.Controls.AxMapControl();
-            this.saveToDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -133,6 +133,13 @@
             this.maxInfluenceTimeToolStripMenuItem.Text = "Max influence time";
             this.maxInfluenceTimeToolStripMenuItem.Click += new System.EventHandler(this.maxInfluenceTimeToolStripMenuItem_Click);
             // 
+            // saveToDBToolStripMenuItem
+            // 
+            this.saveToDBToolStripMenuItem.Name = "saveToDBToolStripMenuItem";
+            this.saveToDBToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
+            this.saveToDBToolStripMenuItem.Text = "save to DB";
+            this.saveToDBToolStripMenuItem.Click += new System.EventHandler(this.saveToDBToolStripMenuItem_Click);
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -204,13 +211,6 @@
             this.axMapControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMapControl1.OcxState")));
             this.axMapControl1.Size = new System.Drawing.Size(779, 402);
             this.axMapControl1.TabIndex = 0;
-            // 
-            // saveToDBToolStripMenuItem
-            // 
-            this.saveToDBToolStripMenuItem.Name = "saveToDBToolStripMenuItem";
-            this.saveToDBToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
-            this.saveToDBToolStripMenuItem.Text = "save to DB";
-            this.saveToDBToolStripMenuItem.Click += new System.EventHandler(this.saveToDBToolStripMenuItem_Click);
             // 
             // Form1
             // 

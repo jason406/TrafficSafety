@@ -502,7 +502,7 @@ throw new System.Exception("Destination unreachable");
         {
             RoadResult mResult = new RoadResult(mMainroad);
             int[] looktime = new int[7] { 150, 300, 450, 600, 900,1000, 1400 };
-            double[] influenceLength = mResult.getSpecificRoadResult("申港大道", looktime);
+            double[] influenceLength = mResult.getSpecificRoadResult("陆家浜路", looktime);
             //mResult.getSpecificRoadResult("曲阳路", looktime);
             //mResult.getSpecificRoadResult("中山北一路", looktime);
             //mResult.getSpecificRoadResult("淮海中路", looktime);
@@ -559,7 +559,7 @@ throw new System.Exception("Destination unreachable");
             //陆家浜路事故
             RoadSection mRoad = new RoadSection(28843, networkDataset);
             //(networkDataset, RoadSection road,int nodeOID, double accidentPoint, int numOfLane, int numOfLaneLeft, double q1, double T12, double T23, double t0)
-            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 147151, 10, 3, 1, 1080, 300, 600, 0); //车道数2 剩余1
+            mMainroad = new MainRoadInfluence(networkDataset, mRoad, 147151, 10, 3, 2, 1080, 380, 410, 0); //车道数2 剩余1
             
             
             DateTime oTimeEnd = DateTime.Now;   //获取结束时间
@@ -567,7 +567,9 @@ throw new System.Exception("Destination unreachable");
 
             Console.WriteLine(oTime.ToString());
             int num=GlobalConst.numProcessedRoads;
-            toolStripStatusLabel1.Text = "计算完成！耗时"+ oTime.ToString() +"，道路数量："+num;
+            RoadResult mResult = new RoadResult(mMainroad);
+            mResult.processResult(0);
+            toolStripStatusLabel1.Text = "计算完成！耗时" + oTime.ToString() + "，道路数量：" + num + " 持续时间:" + mResult.durationTime;
         }
 
         private void maxInfluenceTimeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -578,8 +580,10 @@ throw new System.Exception("Destination unreachable");
 
         private void saveToDBToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string _lookTime = InputBox.ShowInputBox("", "");
+            double lookTime = Convert.ToDouble(_lookTime);
             RoadResult mResult = new RoadResult(mMainroad);
-            mResult.saveResultToDatabase(900);
+            mResult.saveResultToDatabase(lookTime);
         }
     }
 }
