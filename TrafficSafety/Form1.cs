@@ -585,5 +585,14 @@ throw new System.Exception("Destination unreachable");
             RoadResult mResult = new RoadResult(mMainroad);
             mResult.saveResultToDatabase(lookTime);
         }
+
+        private void totalInfluenceLengthToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string[] string1 = { "四平路", "曲阳路", "东沙港路", "新港路" };
+            string[] string_ljb = { "陆家浜路", "西藏南路", "方斜路", "南车站路", "迎勋路", "河南南路" };
+            RoadResult mResult = new RoadResult(mMainroad);
+            mResult.processResult(mMainroad.T12);
+            mResult.writeInfluence(0, (int)Math.Ceiling(mResult.durationTime), 60, "D:\\influence_ljb.txt",string_ljb);
+        }
     }
 }

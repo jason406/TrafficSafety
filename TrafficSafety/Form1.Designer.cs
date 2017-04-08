@@ -40,6 +40,7 @@
             this.infulenceLengthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.maxInfluenceTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.totalInfluenceLengthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.axToolbarControl1 = new ESRI.ArcGIS.Controls.AxToolbarControl();
@@ -91,7 +92,8 @@
             this.testToolStripMenuItem,
             this.infulenceLengthToolStripMenuItem,
             this.maxInfluenceTimeToolStripMenuItem,
-            this.saveToDBToolStripMenuItem});
+            this.saveToDBToolStripMenuItem,
+            this.totalInfluenceLengthToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(975, 28);
@@ -139,6 +141,13 @@
             this.saveToDBToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.saveToDBToolStripMenuItem.Text = "save to DB";
             this.saveToDBToolStripMenuItem.Click += new System.EventHandler(this.saveToDBToolStripMenuItem_Click);
+            // 
+            // totalInfluenceLengthToolStripMenuItem
+            // 
+            this.totalInfluenceLengthToolStripMenuItem.Name = "totalInfluenceLengthToolStripMenuItem";
+            this.totalInfluenceLengthToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
+            this.totalInfluenceLengthToolStripMenuItem.Text = "total influence length";
+            this.totalInfluenceLengthToolStripMenuItem.Click += new System.EventHandler(this.totalInfluenceLengthToolStripMenuItem_Click);
             // 
             // splitContainer1
             // 
@@ -263,6 +272,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripMenuItem maxInfluenceTimeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToDBToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem totalInfluenceLengthToolStripMenuItem;
     }
 }
 

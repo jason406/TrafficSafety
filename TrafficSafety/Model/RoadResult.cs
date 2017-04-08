@@ -255,12 +255,76 @@ namespace TrafficSafety.Model
             sw.Close();
             
         }
+        public void writeInfluence(int startTime, int endTime, int step, string filePath, string[] roadNames)
+        {
+            List<RoadSection> results = processSpeedResult(startTime);
+            System.IO.StreamWriter sw = new System.IO.StreamWriter(filePath);
+            double influenceLength;
+            for (int t = startTime; t <= endTime; t = t + step)
+            {                
+                influenceLength = getTotalInfluenceByTime(t,roadNames);
+                sw.WriteLine(t+","+influenceLength);
+            }
+            sw.Close();
 
+        }
+        private bool checkRoadName(RoadSection road, string[] roadNames)
+        {
+            
+            foreach (string roadName in roadNames)
+            {
+                if (road.name == roadName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public double getTotalInfluenceByTime(int t, string[] roadNames)
+        {
+            List<RoadSection> results = processSpeedResult(mainRoadInfluence.T12);
+
+            congestedLength congestedLengthTime = new congestedLength();
+            congestedLengthTime.t = t;
+            results = processSpeedResult(t);
+            foreach (var roadResult in results)
+            {
+                if (checkRoadName(roadResult,roadNames))
+                {
+                    if (roadResult.name == roadNames[0])
+                    {
+                        if (roadResult.passTurningCount<1)
+                        {
+                            foreach (var resultZone in roadResult.speedResultZone)
+                            {
+                                if (resultZone.congestionLevel > 3)
+                                {
+                                    congestedLengthTime.length += (int)(resultZone.end - resultZone.start);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var resultZone in roadResult.speedResultZone)
+                        {
+                            if (resultZone.congestionLevel > 3)
+                            {
+                                congestedLengthTime.length += (int)(resultZone.end - resultZone.start);
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            return congestedLengthTime.length;
+        }
         public double getMaxInfluenceTime()
         {
 
             List<RoadSection> results = processSpeedResult(mainRoadInfluence.T12);
-            
+
             List<congestedLength> congestedLengthTime = new List<congestedLength>();
             congestedLength m_ongestedLengthTime = new congestedLength();
             int t = (int)(mainRoadInfluence.T12);
@@ -276,8 +340,8 @@ namespace TrafficSafety.Model
                     foreach (var resultZone in roadResult.speedResultZone)
                     {
                         if (resultZone.congestionLevel > 3)
-                        {                            
-                            m_ongestedLengthTime.length +=(int) (resultZone.end - resultZone.start);
+                        {
+                            m_ongestedLengthTime.length += (int)(resultZone.end - resultZone.start);
                         }
                     }
                 }
